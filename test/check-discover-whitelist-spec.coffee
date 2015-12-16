@@ -32,6 +32,21 @@ describe 'CheckDiscoverWhitelist', ->
       it 'should get have the status of ', ->
         expect(@newJob.metadata.status).to.equal http.STATUS_CODES[204]
 
+    describe 'when called with a valid job without a fromUuid', ->
+      beforeEach (done) ->
+        @whitelistManager.canDiscover.yields null, true
+        job =
+          metadata:
+            auth:
+              uuid: 'green-blue'
+              token: 'blue-purple'
+            toUuid: 'bright-green'
+            responseId: 'yellow-green'
+        @sut.do job, (error, @newJob) => done error
+
+      it 'should get have the responseId', ->
+        expect(@whitelistManager.canDiscover).to.have.been.calledWith 'bright-green', 'green-blue'
+
     describe 'when called with a different valid job', ->
       beforeEach (done) ->
         @whitelistManager.canDiscover.yields null, true
