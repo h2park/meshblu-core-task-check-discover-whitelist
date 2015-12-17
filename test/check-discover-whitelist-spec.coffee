@@ -44,8 +44,8 @@ describe 'CheckDiscoverWhitelist', ->
             responseId: 'yellow-green'
         @sut.do job, (error, @newJob) => done error
 
-      it 'should get have the responseId', ->
-        expect(@whitelistManager.canDiscover).to.have.been.calledWith 'bright-green', 'green-blue'
+      it 'should call the whitelistmanager with the correct arguments', ->
+        expect(@whitelistManager.canDiscover).to.have.been.calledWith fromUuid: 'green-blue', toUuid: 'bright-green'
 
     describe 'when called with a different valid job', ->
       beforeEach (done) ->
