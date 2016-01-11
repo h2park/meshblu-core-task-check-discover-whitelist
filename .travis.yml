@@ -1,6 +1,9 @@
 language: node_js
 node_js:
 - '5'
+addons:
+  code_climate:
+    repo_token: 0a463abfa4aac61223d9f57b1a98d9aa34cf054be6e5cf5e745ea5b0f4c790ca
 before_script:
 - npm install -g codeclimate-test-reporter
 after_script:
