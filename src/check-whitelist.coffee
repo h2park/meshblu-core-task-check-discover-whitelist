@@ -1,17 +1,16 @@
 WhitelistManager = require 'meshblu-core-manager-whitelist'
 http             = require 'http'
 
-class VerifyDiscoverWhitelist
-
+class CheckWhitelist
   constructor: ({datastore, @whitelistManager, uuidAliasResolver}) ->
     @whitelistManager ?= new WhitelistManager {datastore, uuidAliasResolver}
 
   do: (job, callback) =>
     {toUuid, fromUuid, responseId, auth} = job.metadata
     fromUuid ?= auth.uuid
-    @whitelistManager.canDiscover {fromUuid, toUuid}, (error, canDiscover) =>
+    @whitelistManager.canDiscover {fromUuid, toUuid}, (error, verified) =>
       return @sendResponse responseId, 500, callback if error?
-      return @sendResponse responseId, 403, callback unless canDiscover
+      return @sendResponse responseId, 403, callback unless verified
       @sendResponse responseId, 204, callback
 
   sendResponse: (responseId, code, callback) =>
@@ -21,4 +20,4 @@ class VerifyDiscoverWhitelist
         code: code
         status: http.STATUS_CODES[code]
 
-module.exports = VerifyDiscoverWhitelist
+module.exports = CheckWhitelist

@@ -1,12 +1,12 @@
 http = require 'http'
-CheckDiscoverWhitelist = require '../src/check-discover-whitelist'
+CheckWhitelist = require '../'
 
-describe 'CheckDiscoverWhitelist', ->
+describe 'CheckWhitelist', ->
   beforeEach ->
     @whitelistManager =
       canDiscover: sinon.stub()
 
-    @sut = new CheckDiscoverWhitelist
+    @sut = new CheckWhitelist
       whitelistManager: @whitelistManager
 
   describe '->do', ->
@@ -69,7 +69,7 @@ describe 'CheckDiscoverWhitelist', ->
       it 'should get have the status of OK', ->
         expect(@newJob.metadata.status).to.equal http.STATUS_CODES[204]
 
-    describe 'when called with a job that with a device that cannot be discovered', ->
+    describe 'when called with a job that with a device that has an invalid whitelist', ->
       beforeEach (done) ->
         @whitelistManager.canDiscover.yields null, false
         job =
